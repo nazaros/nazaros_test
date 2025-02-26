@@ -1,3 +1,4 @@
-output "nginx_service" {
-  value = "Run 'kubectl port-forward --namespace=${var.namespace} svc/nginx 8080:${var.nginx_port}' and access NGINX at http://localhost:8080"
+output "enabled_services" {
+  description = "List of enabled APIs"
+  value       = [for service in google_project_service.enabled_apis : service.service]
 }

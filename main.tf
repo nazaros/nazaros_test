@@ -1,23 +1,8 @@
-           resource "kubernetes_namespace" "nginx" {
-  metadata {
-    name = var.namespace
-  }
-}
+resource "google_project_service" "enabled_apis" {
+  for_each = toset(var.apis)
 
-resource "helm_release" "nginx" {
-  name       = "nginx"
-  namespace  = var.namespace
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "nginx"
-  version    = var.nginx_version
+  project = var.project_id
+  service = each.value
 
-  values = [
-    <<-EOF
-    service:
-      type: ClusterIP
-      port: ${var.nginx_port}
-    EOF
-  ]
-
-  depends_on = [kubernetes_namespace.nginx]
+  disable_on_destroy = false
 }
