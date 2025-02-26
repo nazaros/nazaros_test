@@ -1,17 +1,11 @@
 variable "namespace" {
-  description = "Namespace to deploy NGINX"
+  description = "Namespace to deploy Cilium"
   type        = string
-  default     = "nginx"
+  default     = "cilium"
 }
 
-variable "nginx_version" {
-  description = "NGINX Helm chart version"
+variable "cilium_version" {
+  description = "Cilium Helm chart version"
   type        = string
-  default     = "15.7.0"  # Check for the latest version in the Helm repository
-}
-
-variable "nginx_port" {
-  description = "Port to expose NGINX service"
-  type        = number
-  default     = 80
+  default     = "1.17.1"  # Check for the latest version of Cilium
 }

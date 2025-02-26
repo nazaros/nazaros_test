@@ -1,23 +1,22 @@
-           resource "kubernetes_namespace" "nginx" {
+resource "kubernetes_namespace" "cilium" {
   metadata {
     name = var.namespace
   }
 }
 
-resource "helm_release" "nginx" {
-  name       = "nginx"
+resource "helm_release" "cilium" {
+  name       = "cilium"
   namespace  = var.namespace
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "nginx"
-  version    = var.nginx_version
+  repository = "https://helm.cilium.io/"
+  chart      = "cilium/cilium"
+  version    = var.cilium_version
 
   values = [
     <<-EOF
-    service:
-      type: ClusterIP
-      port: ${var.nginx_port}
+    cni:
+      install: true
     EOF
   ]
 
-  depends_on = [kubernetes_namespace.nginx]
+  depends_on = [kubernetes_namespace.cilium]
 }
