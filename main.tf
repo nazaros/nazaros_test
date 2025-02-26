@@ -1,35 +1,23 @@
-provider "kubernetes" {
-  config_path = "~/.kube/config" # Change this if your Kube config is in a different location
-}
-
-provider "helm" {
-  kubernetes {
-    config_path = "~/.kube/config" # Ensure this matches your Kubernetes config path
+           resource "kubernetes_namespace" "nginx" {
+  metadata {
+    name = var.namespace
   }
 }
 
-resource "helm_release" "prometheus" {
-  name       = "prometheus"
-  namespace  = "monitoring"
-  repository = "https://prometheus-community.github.io/helm-charts"
-  chart      = "prometheus"
-  version    = "14.7.0" # You can use the latest version from the Helm repository
+resource "helm_release" "nginx" {
+  name       = "nginx"
+  namespace  = var.namespace
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "nginx"
+  version    = var.nginx_version
+
   values = [
     <<-EOF
-    server:
-      global:
-        scrape_interval: 15s
-      alerting:
-        alertmanagers:
-          - namespace: monitoring
-            name: alertmanager
-            port: web
+    service:
+      type: ClusterIP
+      port: ${var.nginx_port}
     EOF
   ]
 
-  create_namespace = true
-}
-
-output "prometheus_url" {
-  value = "http://localhost:9090"
+  depends_on = [kubernetes_namespace.nginx]
 }
