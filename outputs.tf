@@ -1,3 +1,9 @@
-output "nginx_service" {
-  value = "Run 'kubectl port-forward --namespace=${var.namespace} svc/nginx 8080:${var.nginx_port}' and access NGINX at http://localhost:8080"
+output "vault_status" {
+  description = "Vault Helm deployment status"
+  value       = helm_release.vault.status
+}
+
+output "vault_service" {
+  description = "Vault service information"
+  value       = helm_release.vault.metadata
 }

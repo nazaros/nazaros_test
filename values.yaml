@@ -1,0 +1,10 @@
+server:
+  ha:
+    enabled: true
+    replicas: 3
+    raft:
+      enabled: true
+  service:
+    type: LoadBalancer
+ui:
+  enabled: true

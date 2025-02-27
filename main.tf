@@ -1,23 +1,17 @@
-           resource "kubernetes_namespace" "nginx" {
+resource "kubernetes_namespace" "vault" {
   metadata {
-    name = var.namespace
+    name = "vault"
   }
 }
 
-resource "helm_release" "nginx" {
-  name       = "nginx"
-  namespace  = var.namespace
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "nginx"
-  version    = var.nginx_version
+resource "helm_release" "vault" {
+  name       = "vault"
+  namespace  = kubernetes_namespace.vault.metadata[0].name
+  repository = "https://helm.releases.hashicorp.com"
+  chart      = "vault"
+  version    = "0.25.0"  # Update to latest if needed
 
-  values = [
-    <<-EOF
-    service:
-      type: ClusterIP
-      port: ${var.nginx_port}
-    EOF
-  ]
+  values = [file("values.yaml")]
 
-  depends_on = [kubernetes_namespace.nginx]
+  depends_on = [kubernetes_namespace.vault]
 }
