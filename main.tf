@@ -1,23 +1,17 @@
-           resource "kubernetes_namespace" "nginx" {
-  metadata {
-    name = var.namespace
-  }
+# Create a Pub/Sub Topic
+resource "google_pubsub_topic" "topic" {
+  name = var.pubsub_topic
 }
 
-resource "helm_release" "nginx" {
-  name       = "nginx"
-  namespace  = var.namespace
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "nginx"
-  version    = var.nginx_version
+# Create a Pub/Sub Subscription
+resource "google_pubsub_subscription" "subscription" {
+  name  = var.pubsub_subscription
+  topic = google_pubsub_topic.topic.name
 
-  values = [
-    <<-EOF
-    service:
-      type: ClusterIP
-      port: ${var.nginx_port}
-    EOF
-  ]
+  ack_deadline_seconds = 10  # Message must be acknowledged within 10 sec
 
-  depends_on = [kubernetes_namespace.nginx]
+  # (Optional) Push endpoint
+  # push_config {
+  #   push_endpoint = "https://your-endpoint.com"
+  # }
 }

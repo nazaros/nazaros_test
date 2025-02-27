@@ -1,3 +1,9 @@
-output "nginx_service" {
-  value = "Run 'kubectl port-forward --namespace=${var.namespace} svc/nginx 8080:${var.nginx_port}' and access NGINX at http://localhost:8080"
+output "pubsub_topic" {
+  description = "The name of the created Pub/Sub topic"
+  value       = google_pubsub_topic.topic.name
+}
+
+output "pubsub_subscription" {
+  description = "The name of the created Pub/Sub subscription"
+  value       = google_pubsub_subscription.subscription.name
 }

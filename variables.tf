@@ -1,17 +1,22 @@
-variable "namespace" {
-  description = "Namespace to deploy NGINX"
+variable "project_id" {
+  description = "GCP project ID"
   type        = string
-  default     = "nginx"
 }
 
-variable "nginx_version" {
-  description = "NGINX Helm chart version"
+variable "region" {
+  description = "GCP region"
   type        = string
-  default     = "15.7.0"  # Check for the latest version in the Helm repository
+  default     = "us-central1"
 }
 
-variable "nginx_port" {
-  description = "Port to expose NGINX service"
-  type        = number
-  default     = 80
+variable "pubsub_topic" {
+  description = "Pub/Sub topic name"
+  type        = string
+  default     = "my-topic"
+}
+
+variable "pubsub_subscription" {
+  description = "Pub/Sub subscription name"
+  type        = string
+  default     = "my-subscription"
 }
