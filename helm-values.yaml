@@ -1,0 +1,24 @@
+controller:
+  image:
+    registry: "docker.io"
+    repository: "jenkins/jenkins"
+    tag: "lts"
+  installPlugins:
+    - kubernetes
+    - workflow-aggregator
+    - git
+  serviceType: NodePort
+  nodePort: 32000
+  ingress:
+    enabled: false
+  resources:
+    requests:
+      cpu: "500m"
+      memory: "512Mi"
+    limits:
+      cpu: "1000m"
+      memory: "1024Mi"
+
+persistence:
+  enabled: true
+  size: 10Gi
